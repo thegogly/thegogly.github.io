@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Googly - Be the Ripple</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --indigo: #4B0082;
+            --midnight-blue: #191970;
+            --rose-gold: #B76E79;
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--white);
+            overflow-x: hidden;
+            background: linear-gradient(135deg, var(--midnight-blue), var(--indigo));
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 20px 0;
+            transition: background 0.3s ease;
+        }
+        
+        header.scrolled {
+            background: rgba(25, 25, 112, 0.9);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--white);
+        }
+        
+        .logo span {
+            color: var(--rose-gold);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+        }
+        
+        nav ul li a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            color: var(--rose-gold);
+        }
+        
+        .donate-btn {
+            background: transparent;
+            border: 2px solid var(--rose-gold);
+            color: var(--white);
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        
+        .donate-btn:hover {
+            background: var(--rose-gold);
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(183, 110, 121, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(183, 110, 121, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(183, 110, 121, 0);
+            }
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(75, 0, 130, 0.7), rgba(25, 25, 112, 0.7));
+            z-index: -1;
+        }
+        
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        /* Story Sections */
+        .story-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 100px 0;
+            position: relative;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        .story-content {
+            max-width: 600px;
+            background: rgba(25, 25, 112, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .story-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--rose-gold);
+        }
+        
+        .story-content p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .hunger {
+            background-image: url('https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+        }
+        
+        .education {
+            background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+        }
+        
+        .water {
+            background-image: url('https://images.unsplash.com/photo-1577897102562-34df3e5f3c4d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+        }
+        
+        /* Impact Section */
+        .impact {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--indigo), var(--midnight-blue));
+            text-align: center;
+        }
+        
+        .impact h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: var(--white);
+        }
+        
+        .impact-stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+        
+        .stat {
+            width: 200px;
+            margin: 20px;
+        }
+        
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--rose-gold);
+            margin-bottom: 10px;
+        }
+        
+        .stat-text {
+            font-size: 1.1rem;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--midnight-blue);
+            padding: 50px 0 20px;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section {
+            width: 300px;
+            margin: 20px;
+        }
+        
+        .footer-section h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--rose-gold);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .footer-section p, .footer-section a {
+            color: var(--white);
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+        }
+        
+        .footer-section a:hover {
+            color: var(--rose-gold);
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .social-icons a {
+            display: inline-block;
+            margin: 0 10px;
+            color: var(--white);
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            color: var(--rose-gold);
+        }
+        
+        .copyright {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            nav ul {
+                display: none;
+            }
+            
+            .impact-stats {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">The <span>Googly</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Our Story</a></li>
+                    <li><a href="#">Impact</a></li>
+                    <li><a href="#">Get Involved</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="donate-btn">Give Hope</button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <video autoplay muted loop class="hero-video">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-water-drop-ripples-1187-large.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>A ripple starts with a single drop. Be the ripple.</h1>
+            <p>Join us in creating waves of positive change through compassionate action and sustainable solutions.</p>
+            <button class="donate-btn">Ignite a Life</button>
+        </div>
+    </section>
+
+    <!-- Hunger Story Section -->
+    <section class="story-section hunger">
+        <div class="container">
+            <div class="story-content">
+                <h2>Your small act can fill a hungry heart.</h2>
+                <p>Every day, millions go to bed hungry. But with your support, we can provide nutritious meals to children and families in need. Meet Maria, a 7-year-old from Guatemala who now receives daily meals at her community center, allowing her to focus on her education and dreams.</p>
+                <button class="donate-btn">Nourish a Child</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Story Section -->
+    <section class="story-section education">
+        <div class="container">
+            <div class="story-content">
+                <h2>Education unlocks potential.</h2>
+                <p>Access to quality education transforms lives and communities. Through your generosity, we've built schools, trained teachers, and provided learning materials to children like Samuel in Kenya, who is now the first in his family to attend secondary school.</p>
+                <button class="donate-btn">Fund Education</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Water Story Section -->
+    <section class="story-section water">
+        <div class="container">
+            <div class="story-content">
+                <h2>Clean water changes everything.</h2>
+                <p>Without clean water, communities struggle with disease and poverty. Your contribution helps us build wells and water purification systems, like the one in Priya's village in India, which now provides safe drinking water to over 500 families.</p>
+                <button class="donate-btn">Provide Water</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section class="impact">
+        <div class="container">
+            <h2>Our Collective Impact</h2>
+            <div class="impact-stats">
+                <div class="stat">
+                    <div class="stat-number">250K+</div>
+                    <div class="stat-text">Lives Transformed</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">47</div>
+                    <div class="stat-text">Communities Served</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">18</div>
+                    <div class="stat-text">Countries Reached</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">96%</div>
+                    <div class="stat-text">Direct to Programs</div>
+                </div>
+            </div>
+            <button class="donate-btn">Be the Change</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>The Googly</h3>
+                    <p>Creating waves of positive change through compassionate action and sustainable solutions.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a href="#">Our Story</a>
+                    <a href="#">Financials</a>
+                    <a href="#">Careers</a>
+                    <a href="#">FAQs</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p>123 Compassion Street</p>
+                    <p>Hope City, HC 10101</p>
+                    <p>info@thegoogly.org</p>
+                    <p>+1 (555) 123-HOPE</p>
+                </div>
+            </div>
+            <div class="social-icons">
+                <a href="#">📱</a>
+                <a href="#">💬</a>
+                <a href="#">📸</a>
+                <a href="#">🐦</a>
+                <a href="#">📘</a>
+            </div>
+            <div class="copyright">
+                <p>© 2023 The Googly. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Simple parallax effect
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.story-section');
+            
+            parallaxElements.forEach(function(element) {
+                const speed = 0.5;
+                element.style.backgroundPositionY = -(scrolled * speed) + 'px';
+            });
+        });
+        
+        // Donation button effects
+        const donateButtons = document.querySelectorAll('.donate-btn');
+        donateButtons.forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.05)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+            
+            button.addEventListener('click', function() {
+                alert('Thank you for your generosity! You would now be taken to our secure donation page.');
+            });
+        });
+    </script>
+</body>
+</html>
