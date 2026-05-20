@@ -1,500 +1,967 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Googly - Be the Ripple</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --indigo: #4B0082;
-            --midnight-blue: #191970;
-            --rose-gold: #B76E79;
-            --white: #ffffff;
-            --light-gray: #f5f5f5;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Montserrat', sans-serif;
-            color: var(--white);
-            overflow-x: hidden;
-            background: linear-gradient(135deg, var(--midnight-blue), var(--indigo));
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Header Styles */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            padding: 20px 0;
-            transition: background 0.3s ease;
-        }
-        
-        header.scrolled {
-            background: rgba(25, 25, 112, 0.9);
-            backdrop-filter: blur(10px);
-        }
-        
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--white);
-        }
-        
-        .logo span {
-            color: var(--rose-gold);
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        nav ul li {
-            margin-left: 30px;
-        }
-        
-        nav ul li a {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-        
-        nav ul li a:hover {
-            color: var(--rose-gold);
-        }
-        
-        .donate-btn {
-            background: transparent;
-            border: 2px solid var(--rose-gold);
-            color: var(--white);
-            padding: 10px 25px;
-            border-radius: 30px;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            animation: pulse 2s infinite;
-        }
-        
-        .donate-btn:hover {
-            background: var(--rose-gold);
-        }
-        
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(183, 110, 121, 0.4);
-            }
-            70% {
-                box-shadow: 0 0 0 10px rgba(183, 110, 121, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(183, 110, 121, 0);
-            }
-        }
-        
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero-video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-        }
-        
-        .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, rgba(75, 0, 130, 0.7), rgba(25, 25, 112, 0.7));
-            z-index: -1;
-        }
-        
-        .hero-content {
-            text-align: center;
-            max-width: 800px;
-            padding: 0 20px;
-        }
-        
-        .hero-content h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            line-height: 1.2;
-        }
-        
-        .hero-content p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-        
-        /* Story Sections */
-        .story-section {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 100px 0;
-            position: relative;
-            background-attachment: fixed;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-        
-        .story-content {
-            max-width: 600px;
-            background: rgba(25, 25, 112, 0.8);
-            padding: 40px;
-            border-radius: 10px;
-            backdrop-filter: blur(5px);
-        }
-        
-        .story-content h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: var(--rose-gold);
-        }
-        
-        .story-content p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-        
-        .hunger {
-            background-image: url('https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-        }
-        
-        .education {
-            background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-        }
-        
-        .water {
-            background-image: url('https://images.unsplash.com/photo-1577897102562-34df3e5f3c4d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-        }
-        
-        /* Impact Section */
-        .impact {
-            padding: 100px 0;
-            background: linear-gradient(135deg, var(--indigo), var(--midnight-blue));
-            text-align: center;
-        }
-        
-        .impact h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            margin-bottom: 50px;
-            color: var(--white);
-        }
-        
-        .impact-stats {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            margin-bottom: 50px;
-        }
-        
-        .stat {
-            width: 200px;
-            margin: 20px;
-        }
-        
-        .stat-number {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            color: var(--rose-gold);
-            margin-bottom: 10px;
-        }
-        
-        .stat-text {
-            font-size: 1.1rem;
-        }
-        
-        /* Footer */
-        footer {
-            background: var(--midnight-blue);
-            padding: 50px 0 20px;
-            text-align: center;
-        }
-        
-        .footer-content {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            margin-bottom: 30px;
-        }
-        
-        .footer-section {
-            width: 300px;
-            margin: 20px;
-        }
-        
-        .footer-section h3 {
-            font-family: 'Playfair Display', serif;
-            color: var(--rose-gold);
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
-        
-        .footer-section p, .footer-section a {
-            color: var(--white);
-            margin-bottom: 10px;
-            display: block;
-            text-decoration: none;
-        }
-        
-        .footer-section a:hover {
-            color: var(--rose-gold);
-        }
-        
-        .social-icons {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        
-        .social-icons a {
-            display: inline-block;
-            margin: 0 10px;
-            color: var(--white);
-            font-size: 1.5rem;
-            transition: color 0.3s ease;
-        }
-        
-        .social-icons a:hover {
-            color: var(--rose-gold);
-        }
-        
-        .copyright {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-            
-            nav ul {
-                display: none;
-            }
-            
-            .impact-stats {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .footer-content {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Header -->
-    <header>
-        <div class="container header-container">
-            <div class="logo">The <span>Googly</span></div>
-            <nav>
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Our Story</a></li>
-                    <li><a href="#">Impact</a></li>
-                    <li><a href="#">Get Involved</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </nav>
-            <button class="donate-btn">Give Hope</button>
-        </div>
-    </header>
+<!doctype html>
+<html lang="bn" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pixel Art Studio</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Noto+Sans+Bengali:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+html, body { height: 100%; margin: 0; }
+* { box-sizing: border-box; }
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <video autoplay muted loop class="hero-video">
-            <source src="https://assets.mixkit.co/videos/preview/mixkit-water-drop-ripples-1187-large.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1>A ripple starts with a single drop. Be the ripple.</h1>
-            <p>Join us in creating waves of positive change through compassionate action and sustainable solutions.</p>
-            <button class="donate-btn">Ignite a Life</button>
-        </div>
-    </section>
+.pixel-font { font-family: 'Press Start 2P', monospace; }
+.bengali-font { font-family: 'Noto Sans Bengali', sans-serif; }
 
-    <!-- Hunger Story Section -->
-    <section class="story-section hunger">
-        <div class="container">
-            <div class="story-content">
-                <h2>Your small act can fill a hungry heart.</h2>
-                <p>Every day, millions go to bed hungry. But with your support, we can provide nutritious meals to children and families in need. Meet Maria, a 7-year-old from Guatemala who now receives daily meals at her community center, allowing her to focus on her education and dreams.</p>
-                <button class="donate-btn">Nourish a Child</button>
-            </div>
-        </div>
-    </section>
+.studio-wrapper {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  background: #0a0a0f;
+  color: #e8e8e8;
+}
 
-    <!-- Education Story Section -->
-    <section class="story-section education">
-        <div class="container">
-            <div class="story-content">
-                <h2>Education unlocks potential.</h2>
-                <p>Access to quality education transforms lives and communities. Through your generosity, we've built schools, trained teachers, and provided learning materials to children like Samuel in Kenya, who is now the first in his family to attend secondary school.</p>
-                <button class="donate-btn">Fund Education</button>
-            </div>
-        </div>
-    </section>
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
 
-    <!-- Water Story Section -->
-    <section class="story-section water">
-        <div class="container">
-            <div class="story-content">
-                <h2>Clean water changes everything.</h2>
-                <p>Without clean water, communities struggle with disease and poverty. Your contribution helps us build wells and water purification systems, like the one in Priya's village in India, which now provides safe drinking water to over 500 families.</p>
-                <button class="donate-btn">Provide Water</button>
-            </div>
-        </div>
-    </section>
+.style-card {
+  border: 2px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(255,255,255,0.03);
+  text-align: center;
+}
+.style-card:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-2px); }
+.style-card.active { border-color: #ff6b9d; background: rgba(255,107,157,0.1); box-shadow: 0 0 20px rgba(255,107,157,0.15); }
 
-    <!-- Impact Section -->
-    <section class="impact">
-        <div class="container">
-            <h2>Our Collective Impact</h2>
-            <div class="impact-stats">
-                <div class="stat">
-                    <div class="stat-number">250K+</div>
-                    <div class="stat-text">Lives Transformed</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">47</div>
-                    <div class="stat-text">Communities Served</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">18</div>
-                    <div class="stat-text">Countries Reached</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">96%</div>
-                    <div class="stat-text">Direct to Programs</div>
-                </div>
-            </div>
-            <button class="donate-btn">Be the Change</button>
-        </div>
-    </section>
+.anim-card {
+  border: 2px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(255,255,255,0.03);
+  text-align: center;
+}
+.anim-card:hover { border-color: rgba(255,255,255,0.2); }
+.anim-card.active { border-color: #6bffb8; background: rgba(107,255,184,0.08); }
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>The Googly</h3>
-                    <p>Creating waves of positive change through compassionate action and sustainable solutions.</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <a href="#">Our Story</a>
-                    <a href="#">Financials</a>
-                    <a href="#">Careers</a>
-                    <a href="#">FAQs</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Contact Us</h3>
-                    <p>123 Compassion Street</p>
-                    <p>Hope City, HC 10101</p>
-                    <p>info@thegoogly.org</p>
-                    <p>+1 (555) 123-HOPE</p>
-                </div>
-            </div>
-            <div class="social-icons">
-                <a href="#">📱</a>
-                <a href="#">💬</a>
-                <a href="#">📸</a>
-                <a href="#">🐦</a>
-                <a href="#">📘</a>
-            </div>
-            <div class="copyright">
-                <p>© 2023 The Googly. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+.upload-zone {
+  border: 3px dashed rgba(255,255,255,0.15);
+  border-radius: 16px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: #ff6b9d;
+  background: rgba(255,107,157,0.05);
+}
 
-    <script>
-        // Header scroll effect
-        window.addEventListener('scroll', function() {
-            const header = document.querySelector('header');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
+.canvas-container {
+  background: repeating-conic-gradient(#1a1a2e 0% 25%, #12121f 0% 50%) 50% / 16px 16px;
+  border-radius: 12px;
+  border: 2px solid rgba(255,255,255,0.08);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  max-width: 512px;
+  aspect-ratio: 1;
+  margin: 0 auto;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ff6b9d, #c44dff);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(255,107,157,0.3); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.btn-secondary {
+  background: rgba(255,255,255,0.08);
+  color: #e8e8e8;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.12); }
+
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px);
+  background: #1e1e2e; border: 1px solid rgba(255,255,255,0.1);
+  color: #e8e8e8; padding: 12px 24px; border-radius: 12px;
+  z-index: 1000; transition: transform 0.4s ease; font-size: 14px;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+.progress-bar {
+  height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: linear-gradient(90deg, #ff6b9d, #c44dff);
+  transition: width 0.3s;
+}
+
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+@keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes glitch {
+  0%,100% { transform: translate(0); filter: none; }
+  20% { transform: translate(-2px, 2px); filter: hue-rotate(90deg); }
+  40% { transform: translate(2px, -2px); filter: hue-rotate(180deg); }
+  60% { transform: translate(-1px, -1px); filter: hue-rotate(270deg); }
+}
+</style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="studio-wrapper grid-bg bengali-font" id="appWrapper"><!-- Toast -->
+   <div class="toast" id="toast"></div><!-- Header -->
+   <header class="px-4 py-4 border-b border-white/5" style="background: linear-gradient(180deg, rgba(255,107,157,0.06), transparent);">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #ff6b9d, #c44dff);"><span class="pixel-font text-white text-xs">P</span>
+      </div>
+      <div>
+       <h1 class="pixel-font text-sm" id="appTitle" style="color: #ff6b9d;">PIXEL ART STUDIO</h1>
+       <p class="text-xs mt-1 opacity-50">স্টাইল • অ্যানিমেশন • GIF</p>
+      </div>
+     </div>
+    </div>
+   </header><!-- Main -->
+   <main class="max-w-6xl mx-auto px-4 py-6"><!-- Upload Section -->
+    <div id="uploadSection">
+     <div class="upload-zone p-8 text-center" id="dropZone" onclick="document.getElementById('fileInput').click()"><input type="file" id="fileInput" accept="image/*" class="hidden" aria-label="Upload pixel art">
+      <div style="animation: float 3s ease-in-out infinite;"><i data-lucide="image-plus" style="width:48px;height:48px;color:#ff6b9d;" class="mx-auto"></i>
+      </div>
+      <p class="mt-4 text-lg font-bold" id="uploadText">পিক্সেল আর্ট আপলোড করুন</p>
+      <p class="text-sm opacity-40 mt-2">PNG, JPG, GIF — ড্র্যাগ এন্ড ড্রপ বা ক্লিক করুন</p>
+     </div>
+    </div><!-- Editor Section (hidden until image loaded) -->
+    <div id="editorSection" class="hidden">
+     <div class="grid grid-cols-1 gap-6"><!-- Canvas -->
+      <div class="lg:col-span-2">
+       <div class="canvas-container" style="min-height: 360px;" id="canvasContainer">
+        <canvas id="mainCanvas" style="image-rendering: pixelated;"></canvas>
+       </div>
+       <div class="flex gap-3 mt-4 flex-wrap"><button class="btn-primary flex items-center gap-2" onclick="downloadPNG()" id="btnDownloadPNG"> <i data-lucide="download" style="width:16px;height:16px;"></i> PNG ডাউনলোড </button> <button class="btn-primary flex items-center gap-2" onclick="startGifExport()" id="btnDownloadGIF"> <i data-lucide="film" style="width:16px;height:16px;"></i> GIF ডাউনলোড </button> <button class="btn-secondary flex items-center gap-2" onclick="resetEditor()"> <i data-lucide="rotate-ccw" style="width:16px;height:16px;"></i> রিসেট </button> <button class="btn-secondary flex items-center gap-2" onclick="document.getElementById('fileInput').click()"> <i data-lucide="upload" style="width:16px;height:16px;"></i> নতুন ছবি </button>
+       </div>
+       <div class="progress-bar mt-3 hidden" id="progressBar">
+        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+       </div>
+       <p class="text-xs opacity-40 mt-1 hidden" id="progressText"></p>
+      </div><!-- Right: Controls -->
+      <div class="space-y-5"><!-- Styles -->
+       <div>
+        <h3 class="text-sm font-bold mb-3 flex items-center gap-2"><i data-lucide="palette" style="width:16px;height:16px;color:#ff6b9d;"></i> আর্ট স্টাইল</h3>
+        <div class="grid grid-cols-2 gap-2" id="styleGrid"></div>
+       </div><!-- Animations -->
+       <div>
+        <h3 class="text-sm font-bold mb-3 flex items-center gap-2"><i data-lucide="sparkles" style="width:16px;height:16px;color:#6bffb8;"></i> অ্যানিমেশন</h3>
+        <div class="grid grid-cols-2 gap-2" id="animGrid"></div>
+       </div><!-- Speed Control -->
+       <div><label class="text-sm font-bold flex items-center gap-2"> <i data-lucide="gauge" style="width:16px;height:16px;color:#ffda6b;"></i> গতি </label> <input type="range" id="speedSlider" min="1" max="10" value="5" class="w-full mt-2 accent-pink-500" aria-label="Animation speed">
+        <div class="flex justify-between text-xs opacity-40">
+         <span>ধীর</span><span>দ্রুত</span>
+        </div>
+       </div><!-- Scale -->
+       <div><label class="text-sm font-bold flex items-center gap-2"> <i data-lucide="maximize" style="width:16px;height:16px;color:#9d6bff;"></i> স্কেল </label>
+        <div class="flex gap-2 mt-2"><button class="btn-secondary text-xs flex-1" onclick="setScale(1)">1x</button> <button class="btn-secondary text-xs flex-1" onclick="setScale(2)">2x</button> <button class="btn-secondary text-xs flex-1" onclick="setScale(4)">4x</button> <button class="btn-secondary text-xs flex-1" onclick="setScale(8)">8x</button>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </main>
+  </div>
+  <script>
+// ==================== STATE ====================
+let originalImage = null;
+let currentStyle = 'none';
+let currentAnim = 'none';
+let scale = 4;
+let animFrame = 0;
+let animLoop = null;
+const canvas = document.getElementById('mainCanvas');
+const ctx = canvas.getContext('2d');
+
+// ==================== STYLES ====================
+const STYLES = [
+  { id: 'none', name: 'অরিজিনাল', emoji: '🎨', desc: 'মূল ছবি' },
+  { id: 'risograph', name: 'Risograph', emoji: '🖨️', desc: 'গ্রেইন টেক্সচার' },
+  { id: 'pop', name: 'Pop Art', emoji: '💥', desc: 'বোল্ড কালার' },
+  { id: 'vaporwave', name: 'Vaporwave', emoji: '🌴', desc: 'রেট্রো ভাইব' },
+  { id: 'gameboy', name: 'Game Boy', emoji: '🎮', desc: '4 কালার' },
+  { id: 'neon', name: 'Neon Glow', emoji: '✨', desc: 'নিয়ন আলো' },
+  { id: 'sepia', name: 'Sepia', emoji: '📜', desc: 'ভিনটেজ' },
+  { id: 'blueprint', name: 'Blueprint', emoji: '📐', desc: 'ব্লুপ্রিন্ট' },
+  { id: 'thermal', name: 'Thermal', emoji: '🌡️', desc: 'হিট ম্যাপ' },
+  { id: 'comic', name: 'Comic', emoji: '💬', desc: 'কমিক বুক' },
+];
+
+const ANIMS = [
+  { id: 'none', name: 'স্থির', emoji: '⏸️' },
+  { id: 'float', name: 'ভাসমান', emoji: '🎈' },
+  { id: 'pulse', name: 'পালস', emoji: '💓' },
+  { id: 'shake', name: 'কম্পন', emoji: '📳' },
+  { id: 'glitch', name: 'গ্লিচ', emoji: '⚡' },
+  { id: 'rainbow', name: 'রেইনবো', emoji: '🌈' },
+  { id: 'scan', name: 'স্ক্যানলাইন', emoji: '📺' },
+  { id: 'pixelate', name: 'পিক্সেলেট', emoji: '🔲' },
+];
+
+// ==================== BUILD UI ====================
+function buildUI() {
+  const sg = document.getElementById('styleGrid');
+  sg.innerHTML = STYLES.map(s => `
+    <div class="style-card ${s.id === currentStyle ? 'active' : ''}" onclick="selectStyle('${s.id}')">
+      <div class="text-xl">${s.emoji}</div>
+      <div class="text-xs font-bold mt-1">${s.name}</div>
+      <div class="text-[10px] opacity-40">${s.desc}</div>
+    </div>
+  `).join('');
+
+  const ag = document.getElementById('animGrid');
+  ag.innerHTML = ANIMS.map(a => `
+    <div class="anim-card ${a.id === currentAnim ? 'active' : ''}" onclick="selectAnim('${a.id}')">
+      <div class="text-lg">${a.emoji}</div>
+      <div class="text-xs font-bold mt-1">${a.name}</div>
+    </div>
+  `).join('');
+}
+
+// ==================== FILE HANDLING ====================
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('dragover'); handleFile(e.dataTransfer.files[0]); });
+fileInput.addEventListener('change', e => { if(e.target.files[0]) handleFile(e.target.files[0]); });
+
+function handleFile(file) {
+  if(!file || !file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      originalImage = img;
+      document.getElementById('uploadSection').classList.add('hidden');
+      document.getElementById('editorSection').classList.remove('hidden');
+      buildUI();
+      renderCanvas();
+      startAnimLoop();
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ==================== STYLE APPLICATION ====================
+function applyStyle(imageData, style) {
+  const d = imageData.data;
+  const w = imageData.width;
+
+  switch(style) {
+    case 'risograph': {
+      // Risograph: limited palette, grain texture, slight misregistration feel
+      for(let i = 0; i < d.length; i += 4) {
+        // Quantize to risograph palette
+        let r = d[i], g = d[i+1], b = d[i+2];
+        // Add grain
+        const grain = (Math.random() - 0.5) * 50;
+        r = Math.min(255, Math.max(0, r + grain));
+        g = Math.min(255, Math.max(0, g + grain));
+        b = Math.min(255, Math.max(0, b + grain));
+        // Push toward riso ink colors (pink/teal duotone)
+        const lum = 0.299*r + 0.587*g + 0.114*b;
+        d[i]   = Math.min(255, lum * 0.4 + 230 * (1 - lum/255) * 0.8);
+        d[i+1] = Math.min(255, lum * 0.6 + 80 * (1 - lum/255) * 0.5);
+        d[i+2] = Math.min(255, lum * 0.3 + 180 * (1 - lum/255) * 0.7);
+        // Quantize
+        d[i]   = Math.round(d[i] / 32) * 32;
+        d[i+1] = Math.round(d[i+1] / 32) * 32;
+        d[i+2] = Math.round(d[i+2] / 32) * 32;
+      }
+      break;
+    }
+    case 'pop': {
+      // Pop Art: extreme contrast, bold primary colors
+      for(let i = 0; i < d.length; i += 4) {
+        let r = d[i], g = d[i+1], b = d[i+2];
+        // Boost saturation extremely
+        const gray = 0.299*r + 0.587*g + 0.114*b;
+        r = Math.min(255, Math.max(0, gray + (r - gray) * 3));
+        g = Math.min(255, Math.max(0, gray + (g - gray) * 3));
+        b = Math.min(255, Math.max(0, gray + (b - gray) * 3));
+        // Posterize to 3 levels
+        d[i]   = r < 85 ? 0 : r < 170 ? 128 : 255;
+        d[i+1] = g < 85 ? 0 : g < 170 ? 128 : 255;
+        d[i+2] = b < 85 ? 0 : b < 170 ? 128 : 255;
+        // Add halftone dot pattern
+        const px = ((i/4) % w);
+        const py = Math.floor((i/4) / w);
+        if ((px + py) % 3 === 0) {
+          d[i] = Math.min(255, d[i] + 40);
+        }
+      }
+      break;
+    }
+    case 'vaporwave': {
+      for(let i = 0; i < d.length; i += 4) {
+        const lum = 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
+        const py = Math.floor((i/4) / w);
+        const t = py / (imageData.height || 1);
+        d[i]   = Math.min(255, lum * 0.3 + 255 * t * 0.7);
+        d[i+1] = Math.min(255, lum * 0.2 + 100 * (1-t) * 0.8);
+        d[i+2] = Math.min(255, lum * 0.3 + 255 * (1-t) * 0.9);
+      }
+      break;
+    }
+    case 'gameboy': {
+      const gb = [[15,56,15],[48,98,48],[139,172,15],[155,188,15]];
+      for(let i = 0; i < d.length; i += 4) {
+        const lum = 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
+        const idx = Math.min(3, Math.floor(lum / 64));
+        d[i] = gb[idx][0]; d[i+1] = gb[idx][1]; d[i+2] = gb[idx][2];
+      }
+      break;
+    }
+    case 'neon': {
+      for(let i = 0; i < d.length; i += 4) {
+        const lum = 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
+        // Dark background with neon edges
+        const edge = Math.abs(d[i] - (d[i+4]||0)) + Math.abs(d[i+1] - (d[i+5]||0));
+        if (edge > 30) {
+          d[i] = 255; d[i+1] = 50; d[i+2] = 255; // neon magenta edges
+        } else {
+          d[i] = lum * 0.1; d[i+1] = lum * 0.05; d[i+2] = lum * 0.15;
+        }
+      }
+      break;
+    }
+    case 'sepia': {
+      for(let i = 0; i < d.length; i += 4) {
+        const r=d[i], g=d[i+1], b=d[i+2];
+        d[i]   = Math.min(255, r*0.393 + g*0.769 + b*0.189);
+        d[i+1] = Math.min(255, r*0.349 + g*0.686 + b*0.168);
+        d[i+2] = Math.min(255, r*0.272 + g*0.534 + b*0.131);
+        // Add slight grain
+        const grain = (Math.random() - 0.5) * 20;
+        d[i] = Math.min(255, Math.max(0, d[i] + grain));
+        d[i+1] = Math.min(255, Math.max(0, d[i+1] + grain));
+        d[i+2] = Math.min(255, Math.max(0, d[i+2] + grain));
+      }
+      break;
+    }
+    case 'blueprint': {
+      for(let i = 0; i < d.length; i += 4) {
+        const lum = 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
+        const px = ((i/4) % w), py = Math.floor((i/4) / w);
+        const grid = (px % 8 === 0 || py % 8 === 0) ? 30 : 0;
+        d[i]   = Math.min(255, 20 + grid);
+        d[i+1] = Math.min(255, 40 + lum * 0.4 + grid);
+        d[i+2] = Math.min(255, 80 + lum * 0.7 + grid);
+      }
+      break;
+    }
+    case 'thermal': {
+      for(let i = 0; i < d.length; i += 4) {
+        const lum = (0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2]) / 255;
+        if (lum < 0.25) { d[i]=0; d[i+1]=0; d[i+2]=Math.floor(lum*4*255); }
+        else if (lum < 0.5) { d[i]=0; d[i+1]=Math.floor((lum-0.25)*4*255); d[i+2]=255; }
+        else if (lum < 0.75) { d[i]=Math.floor((lum-0.5)*4*255); d[i+1]=255; d[i+2]=255-Math.floor((lum-0.5)*4*255); }
+        else { d[i]=255; d[i+1]=255-Math.floor((lum-0.75)*4*255); d[i+2]=0; }
+      }
+      break;
+    }
+    case 'comic': {
+      for(let i = 0; i < d.length; i += 4) {
+        // High contrast + halftone
+        let r=d[i], g=d[i+1], b=d[i+2];
+        r = r < 128 ? 0 : 255;
+        g = g < 128 ? 0 : 255;
+        b = b < 128 ? 0 : 255;
+        const px = ((i/4) % w), py = Math.floor((i/4) / w);
+        if ((px % 4 < 2) && (py % 4 < 2)) {
+          r = Math.min(255, r + 60);
+          g = Math.min(255, g + 60);
+          b = Math.min(255, b + 60);
+        }
+        // Bold outline feel
+        const edge = Math.abs(d[i] - (i > 4 ? d[i-4] : 0));
+        if (edge > 50) { r = 0; g = 0; b = 0; }
+        d[i] = r; d[i+1] = g; d[i+2] = b;
+      }
+      break;
+    }
+  }
+  return imageData;
+}
+
+// ==================== ANIMATION RENDERING ====================
+function renderCanvas() {
+  if (!originalImage) return;
+  const w = originalImage.width;
+  const h = originalImage.height;
+  canvas.width = w * scale;
+  canvas.height = h * scale;
+  ctx.imageSmoothingEnabled = false;
+
+  // Draw original at 1:1 to offscreen
+  const off = document.createElement('canvas');
+  off.width = w; off.height = h;
+  const octx = off.getContext('2d');
+  octx.imageSmoothingEnabled = false;
+  octx.drawImage(originalImage, 0, 0, w, h);
+
+  // Apply style
+  let imgData = octx.getImageData(0, 0, w, h);
+  if (currentStyle !== 'none') {
+    imgData = applyStyle(imgData, currentStyle);
+    octx.putImageData(imgData, 0, 0);
+  }
+
+  // Apply animation frame effects
+  applyAnimFrame(octx, w, h, animFrame);
+
+  // Scale up with pixelated rendering
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(off, 0, 0, w, h, 0, 0, w * scale, h * scale);
+}
+
+function applyAnimFrame(octx, w, h, frame) {
+  const speed = parseInt(document.getElementById('speedSlider').value);
+  const t = frame * speed * 0.02;
+
+  switch(currentAnim) {
+    case 'rainbow': {
+      const imgData = octx.getImageData(0, 0, w, h);
+      const d = imgData.data;
+      for(let i = 0; i < d.length; i += 4) {
+        if (d[i+3] > 0) {
+          const shift = (t * 30) % 360;
+          const [r,g,b] = hslToRgb((shift + d[i]) % 360, 80, 50);
+          d[i] = (d[i] + r) / 2;
+          d[i+1] = (d[i+1] + g) / 2;
+          d[i+2] = (d[i+2] + b) / 2;
+        }
+      }
+      octx.putImageData(imgData, 0, 0);
+      break;
+    }
+    case 'scan': {
+      const lineY = Math.floor(t * 3) % h;
+      const imgData = octx.getImageData(0, 0, w, h);
+      const d = imgData.data;
+      for(let y = 0; y < h; y++) {
+        const dist = Math.abs(y - lineY);
+        if (dist < 3) {
+          for(let x = 0; x < w; x++) {
+            const i = (y * w + x) * 4;
+            d[i] = Math.min(255, d[i] + 100);
+            d[i+1] = Math.min(255, d[i+1] + 100);
+            d[i+2] = Math.min(255, d[i+2] + 100);
+          }
+        }
+        // CRT line effect
+        if (y % 2 === 0) {
+          for(let x = 0; x < w; x++) {
+            const i = (y * w + x) * 4;
+            d[i] *= 0.85; d[i+1] *= 0.85; d[i+2] *= 0.85;
+          }
+        }
+      }
+      octx.putImageData(imgData, 0, 0);
+      break;
+    }
+    case 'pixelate': {
+      const blockSize = Math.max(2, Math.floor(Math.abs(Math.sin(t * 0.5)) * 6) + 1);
+      const imgData = octx.getImageData(0, 0, w, h);
+      const d = imgData.data;
+      for(let y = 0; y < h; y += blockSize) {
+        for(let x = 0; x < w; x += blockSize) {
+          const i = (y * w + x) * 4;
+          const r = d[i], g = d[i+1], b = d[i+2], a = d[i+3];
+          for(let dy = 0; dy < blockSize && y+dy < h; dy++) {
+            for(let dx = 0; dx < blockSize && x+dx < w; dx++) {
+              const j = ((y+dy) * w + (x+dx)) * 4;
+              d[j] = r; d[j+1] = g; d[j+2] = b; d[j+3] = a;
             }
-        });
-        
-        // Simple parallax effect
-        window.addEventListener('scroll', function() {
-            const scrolled = window.pageYOffset;
-            const parallaxElements = document.querySelectorAll('.story-section');
-            
-            parallaxElements.forEach(function(element) {
-                const speed = 0.5;
-                element.style.backgroundPositionY = -(scrolled * speed) + 'px';
-            });
-        });
-        
-        // Donation button effects
-        const donateButtons = document.querySelectorAll('.donate-btn');
-        donateButtons.forEach(button => {
-            button.addEventListener('mouseenter', function() {
-                this.style.transform = 'scale(1.05)';
-            });
-            
-            button.addEventListener('mouseleave', function() {
-                this.style.transform = 'scale(1)';
-            });
-            
-            button.addEventListener('click', function() {
-                alert('Thank you for your generosity! You would now be taken to our secure donation page.');
-            });
-        });
-    </script>
-</body>
+          }
+        }
+      }
+      octx.putImageData(imgData, 0, 0);
+      break;
+    }
+    case 'glitch': {
+      const imgData = octx.getImageData(0, 0, w, h);
+      const d = imgData.data;
+      // Random horizontal shifts
+      if (Math.random() < 0.3) {
+        const sliceY = Math.floor(Math.random() * h);
+        const sliceH = Math.floor(Math.random() * 5) + 1;
+        const shift = Math.floor((Math.random() - 0.5) * 8);
+        for(let y = sliceY; y < Math.min(h, sliceY + sliceH); y++) {
+          const row = new Uint8ClampedArray(w * 4);
+          for(let x = 0; x < w; x++) {
+            const sx = ((x + shift) % w + w) % w;
+            const si = (y * w + sx) * 4;
+            const di = x * 4;
+            row[di] = d[si]; row[di+1] = d[si+1]; row[di+2] = d[si+2]; row[di+3] = d[si+3];
+          }
+          for(let x = 0; x < w; x++) {
+            const i = (y * w + x) * 4;
+            d[i] = row[x*4]; d[i+1] = row[x*4+1]; d[i+2] = row[x*4+2]; d[i+3] = row[x*4+3];
+          }
+        }
+        // Color channel shift
+        if (Math.random() < 0.5) {
+          for(let i = 0; i < d.length; i += 4) {
+            d[i] = d[Math.min(i + 8, d.length - 4)] || d[i];
+          }
+        }
+      }
+      octx.putImageData(imgData, 0, 0);
+      break;
+    }
+    case 'float': {
+      // Apply via canvas transform
+      const offY = Math.sin(t) * 3;
+      const tempData = octx.getImageData(0, 0, w, h);
+      octx.clearRect(0, 0, w, h);
+      octx.putImageData(tempData, 0, Math.round(offY));
+      break;
+    }
+    case 'pulse': {
+      const alpha = 0.5 + 0.5 * Math.sin(t * 2);
+      const imgData = octx.getImageData(0, 0, w, h);
+      const d = imgData.data;
+      for(let i = 3; i < d.length; i += 4) {
+        d[i] = Math.floor(d[i] * (0.4 + alpha * 0.6));
+      }
+      octx.putImageData(imgData, 0, 0);
+      break;
+    }
+    case 'shake': {
+      const offX = Math.round((Math.random() - 0.5) * 3);
+      const offY = Math.round((Math.random() - 0.5) * 3);
+      const tempData = octx.getImageData(0, 0, w, h);
+      octx.clearRect(0, 0, w, h);
+      octx.putImageData(tempData, offX, offY);
+      break;
+    }
+  }
+}
+
+function hslToRgb(h, s, l) {
+  s /= 100; l /= 100;
+  const c = (1 - Math.abs(2*l - 1)) * s;
+  const x = c * (1 - Math.abs((h/60)%2 - 1));
+  const m = l - c/2;
+  let r, g, b;
+  if (h < 60) { r=c; g=x; b=0; }
+  else if (h < 120) { r=x; g=c; b=0; }
+  else if (h < 180) { r=0; g=c; b=x; }
+  else if (h < 240) { r=0; g=x; b=c; }
+  else if (h < 300) { r=x; g=0; b=c; }
+  else { r=c; g=0; b=x; }
+  return [Math.round((r+m)*255), Math.round((g+m)*255), Math.round((b+m)*255)];
+}
+
+function startAnimLoop() {
+  if (animLoop) cancelAnimationFrame(animLoop);
+  function loop() {
+    animFrame++;
+    renderCanvas();
+    animLoop = requestAnimationFrame(loop);
+  }
+  if (currentAnim !== 'none') loop();
+}
+
+// ==================== SELECTIONS ====================
+function selectStyle(id) {
+  currentStyle = id;
+  buildUI();
+  renderCanvas();
+}
+
+function selectAnim(id) {
+  currentAnim = id;
+  buildUI();
+  if (animLoop) cancelAnimationFrame(animLoop);
+  animFrame = 0;
+  if (currentAnim === 'none') {
+    renderCanvas();
+  } else {
+    startAnimLoop();
+  }
+}
+
+function setScale(s) {
+  scale = s;
+  renderCanvas();
+}
+
+function resetEditor() {
+  currentStyle = 'none';
+  currentAnim = 'none';
+  scale = 4;
+  animFrame = 0;
+  if (animLoop) cancelAnimationFrame(animLoop);
+  buildUI();
+  renderCanvas();
+}
+
+// ==================== DOWNLOADS ====================
+function downloadPNG() {
+  if (!originalImage) return;
+  const link = document.createElement('a');
+  link.download = 'pixel-art-styled.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+  showToast('✅ PNG ডাউনলোড হচ্ছে!');
+}
+
+async function startGifExport() {
+  if (!originalImage) return;
+  const btn = document.getElementById('btnDownloadGIF');
+  btn.disabled = true;
+  btn.innerHTML = '<span style="animation:spin 1s linear infinite;display:inline-block;">⏳</span> তৈরি হচ্ছে...';
+
+  const pb = document.getElementById('progressBar');
+  const pf = document.getElementById('progressFill');
+  const pt = document.getElementById('progressText');
+  pb.classList.remove('hidden');
+  pt.classList.remove('hidden');
+
+  const frames = 30;
+  const delay = Math.max(30, 150 - parseInt(document.getElementById('speedSlider').value) * 12);
+  const savedAnim = currentAnim === 'none' ? 'float' : currentAnim;
+  const savedAnimOrig = currentAnim;
+  currentAnim = savedAnim;
+
+  // Collect frames as data URLs
+  const frameDataURLs = [];
+  const w = originalImage.width * scale;
+  const h = originalImage.height * scale;
+
+  for (let i = 0; i < frames; i++) {
+    animFrame = i * 2;
+    renderCanvas();
+    frameDataURLs.push(canvas.toDataURL('image/png'));
+    pf.style.width = ((i + 1) / frames * 70) + '%';
+    pt.textContent = `ফ্রেম ${i+1}/${frames} ক্যাপচার হচ্ছে...`;
+    await new Promise(r => setTimeout(r, 10));
+  }
+
+  pt.textContent = 'GIF এনকোডিং হচ্ছে...';
+  pf.style.width = '80%';
+
+  // Simple GIF encoder (binary)
+  try {
+    const gif = await encodeGIF(frameDataURLs, w, h, delay);
+    const blob = new Blob([gif], { type: 'image/gif' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.download = 'pixel-art-animated.gif';
+    link.href = url;
+    link.click();
+    URL.revokeObjectURL(url);
+    showToast('✅ GIF ডাউনলোড হচ্ছে!');
+  } catch(e) {
+    showToast('❌ GIF তৈরি করতে সমস্যা হয়েছে');
+  }
+
+  currentAnim = savedAnimOrig;
+  animFrame = 0;
+  if (currentAnim !== 'none') startAnimLoop(); else renderCanvas();
+
+  pf.style.width = '100%';
+  pt.textContent = 'সম্পন্ন!';
+  btn.disabled = false;
+  btn.innerHTML = '<i data-lucide="film" style="width:16px;height:16px;"></i> GIF ডাউনলোড';
+  lucide.createIcons();
+  setTimeout(() => { pb.classList.add('hidden'); pt.classList.add('hidden'); }, 2000);
+}
+
+// Minimal GIF89a encoder
+async function encodeGIF(frameURLs, width, height, delay) {
+  // Get pixel data from frames
+  const offCanvas = document.createElement('canvas');
+  offCanvas.width = width;
+  offCanvas.height = height;
+  const offCtx = offCanvas.getContext('2d');
+
+  const allFramePixels = [];
+  for (const url of frameURLs) {
+    const img = await loadImage(url);
+    offCtx.clearRect(0, 0, width, height);
+    offCtx.drawImage(img, 0, 0);
+    const imgData = offCtx.getImageData(0, 0, width, height);
+    allFramePixels.push(imgData.data);
+  }
+
+  // Build global color table from quantized colors
+  const colorMap = new Map();
+  const colors = [];
+
+  function getColorIndex(r, g, b) {
+    // Quantize to 6 bits per channel for 216 color cube
+    const qr = Math.round(r / 51) * 51;
+    const qg = Math.round(g / 51) * 51;
+    const qb = Math.round(b / 51) * 51;
+    const key = (qr << 16) | (qg << 8) | qb;
+    if (colorMap.has(key)) return colorMap.get(key);
+    if (colors.length < 256) {
+      const idx = colors.length;
+      colors.push([qr, qg, qb]);
+      colorMap.set(key, idx);
+      return idx;
+    }
+    // Find nearest
+    let best = 0, bestDist = Infinity;
+    for (let i = 0; i < colors.length; i++) {
+      const dr = colors[i][0]-qr, dg = colors[i][1]-qg, db = colors[i][2]-qb;
+      const dist = dr*dr + dg*dg + db*db;
+      if (dist < bestDist) { bestDist = dist; best = i; }
+    }
+    colorMap.set(key, best);
+    return best;
+  }
+
+  // Pre-index all frames
+  const indexedFrames = allFramePixels.map(pixels => {
+    const indices = new Uint8Array(width * height);
+    for (let i = 0; i < width * height; i++) {
+      indices[i] = getColorIndex(pixels[i*4], pixels[i*4+1], pixels[i*4+2]);
+    }
+    return indices;
+  });
+
+  // Pad color table to power of 2
+  while (colors.length < 256) colors.push([0, 0, 0]);
+  const colorTableSize = 7; // 2^(7+1) = 256
+
+  // Build GIF binary
+  const bytes = [];
+  function writeStr(s) { for(let i=0;i<s.length;i++) bytes.push(s.charCodeAt(i)); }
+  function writeByte(b) { bytes.push(b & 0xff); }
+  function writeShort(v) { bytes.push(v & 0xff); bytes.push((v >> 8) & 0xff); }
+
+  // Header
+  writeStr('GIF89a');
+  writeShort(width);
+  writeShort(height);
+  writeByte(0x80 | colorTableSize); // GCT flag + size
+  writeByte(0); // bg color
+  writeByte(0); // pixel aspect
+
+  // Global Color Table
+  for (const [r, g, b] of colors) { writeByte(r); writeByte(g); writeByte(b); }
+
+  // Netscape extension for looping
+  writeByte(0x21); writeByte(0xFF); writeByte(11);
+  writeStr('NETSCAPE2.0');
+  writeByte(3); writeByte(1); writeShort(0); writeByte(0);
+
+  // Frames
+  const delayCS = Math.round(delay / 10);
+  for (const indices of indexedFrames) {
+    // Graphic Control Extension
+    writeByte(0x21); writeByte(0xF9); writeByte(4);
+    writeByte(0); writeShort(delayCS); writeByte(0); writeByte(0);
+
+    // Image Descriptor
+    writeByte(0x2C);
+    writeShort(0); writeShort(0); writeShort(width); writeShort(height);
+    writeByte(0); // no local color table
+
+    // LZW compress
+    const minCodeSize = 8;
+    writeByte(minCodeSize);
+    const compressed = lzwEncode(indices, minCodeSize);
+    // Write sub-blocks
+    let pos = 0;
+    while (pos < compressed.length) {
+      const chunk = Math.min(255, compressed.length - pos);
+      writeByte(chunk);
+      for (let i = 0; i < chunk; i++) bytes.push(compressed[pos++]);
+    }
+    writeByte(0); // block terminator
+  }
+
+  writeByte(0x3B); // trailer
+  return new Uint8Array(bytes);
+}
+
+function lzwEncode(indices, minCodeSize) {
+  const clearCode = 1 << minCodeSize;
+  const eoiCode = clearCode + 1;
+  let codeSize = minCodeSize + 1;
+  let nextCode = eoiCode + 1;
+
+  // Dictionary
+  let dict = new Map();
+  for (let i = 0; i < clearCode; i++) dict.set(String(i), i);
+
+  const output = [];
+  let bits = 0, bitCount = 0;
+  function writeBits(code, size) {
+    bits |= (code << bitCount);
+    bitCount += size;
+    while (bitCount >= 8) {
+      output.push(bits & 0xff);
+      bits >>= 8;
+      bitCount -= 8;
+    }
+  }
+
+  writeBits(clearCode, codeSize);
+  let current = String(indices[0]);
+
+  for (let i = 1; i < indices.length; i++) {
+    const next = current + ',' + indices[i];
+    if (dict.has(next)) {
+      current = next;
+    } else {
+      writeBits(dict.get(current), codeSize);
+      if (nextCode < 4096) {
+        dict.set(next, nextCode++);
+        if (nextCode > (1 << codeSize) && codeSize < 12) codeSize++;
+      } else {
+        writeBits(clearCode, codeSize);
+        dict = new Map();
+        for (let j = 0; j < clearCode; j++) dict.set(String(j), j);
+        nextCode = eoiCode + 1;
+        codeSize = minCodeSize + 1;
+      }
+      current = String(indices[i]);
+    }
+  }
+  writeBits(dict.get(current), codeSize);
+  writeBits(eoiCode, codeSize);
+  if (bitCount > 0) output.push(bits & 0xff);
+  return output;
+}
+
+function loadImage(src) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.src = src;
+  });
+}
+
+// ==================== TOAST ====================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ==================== ELEMENT SDK ====================
+const defaultConfig = {
+  app_title: 'PIXEL ART STUDIO',
+  upload_text: 'পিক্সেল আর্ট আপলোড করুন',
+  background_color: '#0a0a0f',
+  surface_color: '#1a1a2e',
+  text_color: '#e8e8e8',
+  primary_color: '#ff6b9d',
+  accent_color: '#6bffb8',
+  font_family: 'Press Start 2P',
+  font_size: 14,
+};
+
+function applyConfig(config) {
+  const el = (id) => document.getElementById(id);
+  const t = el('appTitle');
+  if (t) t.textContent = config.app_title || defaultConfig.app_title;
+  const u = el('uploadText');
+  if (u) u.textContent = config.upload_text || defaultConfig.upload_text;
+
+  const bg = config.background_color || defaultConfig.background_color;
+  const surface = config.surface_color || defaultConfig.surface_color;
+  const text = config.text_color || defaultConfig.text_color;
+  const primary = config.primary_color || defaultConfig.primary_color;
+  const accent = config.accent_color || defaultConfig.accent_color;
+  const font = config.font_family || defaultConfig.font_family;
+  const fontSize = config.font_size || defaultConfig.font_size;
+
+  const wrapper = el('appWrapper');
+  if (wrapper) {
+    wrapper.style.background = bg;
+    wrapper.style.color = text;
+  }
+  if (t) t.style.color = primary;
+
+  document.querySelectorAll('.btn-primary').forEach(b => {
+    b.style.background = `linear-gradient(135deg, ${primary}, #c44dff)`;
+  });
+  document.querySelectorAll('.style-card.active').forEach(c => {
+    c.style.borderColor = primary;
+  });
+  document.querySelectorAll('.anim-card.active').forEach(c => {
+    c.style.borderColor = accent;
+  });
+
+  document.querySelectorAll('.pixel-font').forEach(e => {
+    e.style.fontFamily = `${font}, monospace`;
+  });
+  document.querySelectorAll('.bengali-font').forEach(e => {
+    e.style.fontSize = fontSize + 'px';
+  });
+}
+
+if (window.elementSdk) {
+  window.elementSdk.init({
+    defaultConfig,
+    onConfigChange: async (config) => applyConfig(config),
+    mapToCapabilities: (config) => ({
+      recolorables: [
+        { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+        { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+        { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+        { get: () => config.primary_color || defaultConfig.primary_color, set: (v) => { config.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); } },
+        { get: () => config.accent_color || defaultConfig.accent_color, set: (v) => { config.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); } },
+      ],
+      borderables: [],
+      fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+      fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } },
+    }),
+    mapToEditPanelValues: (config) => new Map([
+      ['app_title', config.app_title || defaultConfig.app_title],
+      ['upload_text', config.upload_text || defaultConfig.upload_text],
+    ]),
+  });
+}
+
+// Init
+buildUI();
+lucide.createIcons();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fb28334732c4f02',t:'MTc3ODY4NDIxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
