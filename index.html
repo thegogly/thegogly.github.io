@@ -3,16 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>On-Chain NFT Loader · Eth + Robinhood</title>
+  <title>On-Chain NFT Loader & Downloader</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- JSZip & FileSaver for ultra fast ZIP generation -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-    * { font-family: 'Plus Jakarta Sans', sans-serif; }
-    body { background-color: #0b0f17; color: #f3f4f6; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0b0f17;
+      color: #f3f4f6;
+    }
     .glass-card {
       background: rgba(17, 24, 39, 0.7);
       backdrop-filter: blur(12px);
@@ -29,6 +32,7 @@
     }
   </style>
 </head>
+
 <body class="min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
   <!-- Header -->
@@ -39,7 +43,6 @@
           <i class="fa-solid fa-link"></i>
         </div>
         <span class="text-xl font-bold tracking-tight text-white">OnChain <span class="gradient-text">Vault</span></span>
-        <span class="hidden sm:inline-block text-[10px] font-mono bg-white/5 px-2 py-0.5 rounded-full text-gray-400 border border-white/5">Eth + Robinhood</span>
       </div>
 
       <!-- ZIP Download Controls -->
@@ -56,44 +59,45 @@
     </div>
   </header>
 
-  <!-- Main -->
+  <!-- Main Section -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-grow">
-    
-    <!-- API Controls -->
+
+    <!-- Controls -->
     <div class="glass-card p-6 rounded-2xl mb-8 border border-white/10">
       <h2 class="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">
-        <i class="fa-solid fa-gears text-indigo-400"></i> Alchemy API + Network
+        <i class="fa-solid fa-gears text-indigo-400"></i> Robinhood / EVM On-Chain Settings
       </h2>
+
       <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
-        <div class="md:col-span-3">
-          <label class="block text-xs text-gray-400 mb-1 font-medium">Network</label>
-          <select id="networkSelect" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition font-mono">
-            <option value="eth-mainnet">Ethereum Mainnet</option>
-            <option value="robinhood" selected>Robinhood (ETH)</option>
-          </select>
-        </div>
-        <div class="md:col-span-3">
+        <div class="md:col-span-4">
           <label class="block text-xs text-gray-400 mb-1 font-medium">Alchemy API Key</label>
-          <input type="text" id="apiKeyInput" value="Sgfq6KI6igqQuemutQiHy" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition font-mono">
+          <input type="text" id="apiKeyInput" value="FXZjUazW6nIgeW8SRwCDZ" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition font-mono">
         </div>
+
         <div class="md:col-span-4">
           <label class="block text-xs text-gray-400 mb-1 font-medium">Contract Address</label>
           <input type="text" id="contractInput" value="0x539cdd042c2f3d93ebc5be7dfff0c79f3b4fabf0" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition font-mono">
         </div>
+
+        <div class="md:col-span-2">
+          <label class="block text-xs text-gray-400 mb-1 font-medium">Max Tokens to Fetch</label>
+          <input type="number" id="maxTokenInput" value="50" min="1" max="1000" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition font-mono">
+        </div>
+
         <div class="md:col-span-2 flex items-end">
           <button onclick="startFetching()" class="w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded-xl hover:bg-indigo-500 transition shadow-lg shadow-indigo-500/20 flex items-center justify-center gap-2 text-sm">
-            <i class="fa-solid fa-arrows-rotate"></i> Fetch All
+            <i class="fa-solid fa-arrows-rotate"></i> Fetch On-Chain
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Loading Progress -->
+    <!-- Loading Progress Bar -->
     <div id="statusBox" class="glass-card p-6 rounded-2xl mb-8 border border-white/10 hidden">
       <div class="flex items-center justify-between mb-3">
         <div class="flex items-center gap-3">
           <div class="w-3 h-3 rounded-full bg-indigo-500 animate-ping"></div>
-          <span id="statusText" class="text-sm font-semibold text-white">Fetching On-Chain Data...</span>
+          <span id="statusText" class="text-sm font-semibold text-white">Connecting to Robinhood Chain...</span>
         </div>
         <span id="progressCount" class="text-xs font-mono text-indigo-400 font-bold">0 Loaded</span>
       </div>
@@ -109,22 +113,39 @@
         On-Chain Collection
       </h2>
       <div class="text-xs text-gray-400 font-mono">
-        Total Items: <span id="loadedCount" class="text-white font-bold">0</span>
+        Total Items Loaded: <span id="loadedCount" class="text-white font-bold">0</span>
       </div>
     </div>
 
     <!-- NFT Grid -->
     <div id="nftGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
-
   </main>
 
   <footer class="border-t border-white/10 py-6 bg-black/40 text-center text-xs text-gray-500">
-    High Speed On-Chain SVG & Metadata Fetcher · Eth + Robinhood
+    High Speed Direct EVM RPC On-Chain SVG & Metadata Reader
   </footer>
 
   <script>
     let allNFTs = [];
     let isFetching = false;
+
+    // Decode Base64 or Data URI Metadata
+    function parseMetadataUri(uri) {
+      if (!uri) return null;
+      try {
+        if (uri.startsWith('data:application/json;base64,')) {
+          const jsonStr = atob(uri.replace('data:application/json;base64,', ''));
+          return JSON.parse(jsonStr);
+        } else if (uri.startsWith('data:application/json;utf8,')) {
+          return JSON.parse(decodeURIComponent(uri.replace('data:application/json;utf8,', '')));
+        } else if (uri.startsWith('data:application/json,')) {
+          return JSON.parse(decodeURIComponent(uri.replace('data:application/json,', '')));
+        }
+      } catch (e) {
+        console.error("JSON Metadata parsing error", e);
+      }
+      return null;
+    }
 
     function resolveUrl(url) {
       if (!url) return 'https://via.placeholder.com/400x400/111827/6B7280?text=No+Image';
@@ -134,15 +155,45 @@
       return url;
     }
 
-    // Build Alchemy URL based on network selection
-    function getAlchemyBaseUrl(network, apiKey) {
-      if (network === 'robinhood') {
-        // Robinhood uses ETH mainnet endpoint (same as ethereum) - they use standard ETH rpc
-        // but we keep it as a separate logical network. For Robinhood we use eth-mainnet with a hint.
-        return `https://eth-mainnet.g.alchemy.com/nft/v3/${apiKey}`;
+    // Call contract tokenURI(tokenId) function via RPC
+    async function fetchTokenURI(rpcUrl, contract, tokenId) {
+      // tokenURI(uint256) function signature selector is 0xc87b56dd
+      const paddedTokenId = tokenId.toString(16).padStart(64, '0');
+      const data = '0xc87b56dd' + paddedTokenId;
+
+      const response = await fetch(rpcUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: tokenId,
+          method: 'eth_call',
+          params: [{ to: contract, data: data }, 'latest']
+        })
+      });
+
+      const resJson = await response.json();
+      if (resJson.error) {
+        throw new Error(resJson.error.message || "Contract call failed");
       }
-      // eth-mainnet
-      return `https://eth-mainnet.g.alchemy.com/nft/v3/${apiKey}`;
+
+      // Decode ABI hex output to string
+      const hex = resJson.result;
+      if (!hex || hex === '0x') return null;
+
+      // Extract string from ABI encoding
+      const cleanHex = hex.replace('0x', '');
+      if (cleanHex.length < 128) return null;
+      
+      const lengthHex = cleanHex.substring(64, 128);
+      const stringLength = parseInt(lengthHex, 16);
+      const stringDataHex = cleanHex.substring(128, 128 + stringLength * 2);
+
+      let str = '';
+      for (let i = 0; i < stringDataHex.length; i += 2) {
+        str += String.fromCharCode(parseInt(stringDataHex.substr(i, 2), 16));
+      }
+      return str;
     }
 
     async function startFetching() {
@@ -151,8 +202,10 @@
 
       const apiKey = document.getElementById("apiKeyInput").value.trim();
       const contract = document.getElementById("contractInput").value.trim();
-      const network = document.getElementById("networkSelect").value;
-      
+      const maxTokens = parseInt(document.getElementById("maxTokenInput").value) || 50;
+
+      const rpcUrl = `https://robinhood-mainnet.g.alchemy.com/v2/${apiKey}`;
+
       const grid = document.getElementById("nftGrid");
       const statusBox = document.getElementById("statusBox");
       const statusText = document.getElementById("statusText");
@@ -163,80 +216,85 @@
       grid.innerHTML = "";
       allNFTs = [];
       statusBox.classList.remove("hidden");
-      
-      let pageKey = null;
-      const baseUrl = getAlchemyBaseUrl(network, apiKey);
+      progressBar.style.width = "0%";
 
-      try {
-        do {
-          let url = `${baseUrl}/getNFTsForContract?contractAddress=${contract}&withMetadata=true&limit=100`;
-          if (pageKey) {
-            url += `&pageKey=${pageKey}`;
+      let successCount = 0;
+      let consecutiveErrors = 0;
+
+      for (let tokenId = 1; tokenId <= maxTokens; tokenId++) {
+        try {
+          statusText.innerText = `Fetching On-Chain Token #${tokenId} from Robinhood Chain...`;
+
+          const uri = await fetchTokenURI(rpcUrl, contract, tokenId);
+
+          if (uri) {
+            const metadata = parseMetadataUri(uri) || { name: `#${tokenId}`, image: uri };
+            const nftObj = {
+              tokenId: tokenId,
+              name: metadata.name || `#${tokenId}`,
+              image: metadata.image || metadata.image_data,
+              rawMetadata: metadata
+            };
+
+            allNFTs.push(nftObj);
+            renderCard(nftObj);
+
+            successCount++;
+            consecutiveErrors = 0;
+          } else {
+            consecutiveErrors++;
           }
+        } catch (err) {
+          console.warn(`Failed token #${tokenId}:`, err.message);
+          consecutiveErrors++;
+        }
 
-          statusText.innerText = `Fetching metadata batch... (${allNFTs.length} loaded) · ${network}`;
-          const res = await fetch(url);
-          if (!res.ok) throw new Error(`API Connection Failed (${res.status})`);
+        // Update progress
+        let pct = Math.floor((tokenId / maxTokens) * 100);
+        progressBar.style.width = pct + "%";
+        progressCount.innerText = `${allNFTs.length} Loaded`;
+        loadedCount.innerText = allNFTs.length;
 
-          const data = await res.json();
-          const nfts = data.nfts || [];
-          
-          if (nfts.length === 0) break;
-
-          allNFTs.push(...nfts);
-          pageKey = data.pageKey;
-
-          progressCount.innerText = `${allNFTs.length} Loaded`;
-          loadedCount.innerText = allNFTs.length;
-          
-          renderBatch(nfts);
-
-        } while (pageKey && allNFTs.length < 10000);
-
-        statusText.innerText = `✅ All Collection Metadata Loaded (${allNFTs.length} items)`;
-        progressBar.style.width = "100%";
-        
-        enableDownloadButtons();
-
-      } catch (err) {
-        console.error(err);
-        statusText.innerText = "⚠️ Error: " + err.message;
-      } finally {
-        isFetching = false;
+        // Break if too many consecutive non-existent tokens
+        if (consecutiveErrors >= 5 && allNFTs.length > 0) {
+          break;
+        }
       }
+
+      if (allNFTs.length > 0) {
+        statusText.innerText = `Completed! Successfully loaded ${allNFTs.length} On-Chain NFTs.`;
+        enableDownloadButtons();
+      } else {
+        statusText.innerText = "Error: Could not load tokens. Verify API Key and Contract Address.";
+      }
+
+      isFetching = false;
     }
 
-    function renderBatch(nfts) {
+    function renderCard(nft) {
       const grid = document.getElementById("nftGrid");
+      let imgUrl = resolveUrl(nft.image);
 
-      nfts.forEach((nft) => {
-        const tokenId = nft.tokenId || (allNFTs.indexOf(nft) + 1);
-        const title = nft.name || nft.title || `#${tokenId}`;
-        let imgUrl = nft.image?.cachedUrl || nft.image?.originalUrl || nft.raw?.metadata?.image;
-        imgUrl = resolveUrl(imgUrl);
+      const card = document.createElement("div");
+      card.className = "glass-card rounded-2xl overflow-hidden flex flex-col justify-between p-3 transition duration-300";
 
-        const card = document.createElement("div");
-        card.className = "glass-card rounded-2xl overflow-hidden flex flex-col justify-between p-3 transition duration-300";
-
-        card.innerHTML = `
-          <div class="relative aspect-square rounded-xl overflow-hidden bg-black/40 border border-white/5 flex items-center justify-center">
-            <img src="${imgUrl}" 
-                 alt="${title}"
-                 loading="lazy"
-                 class="w-full h-full object-contain" 
-                 onerror="this.onerror=null; this.src='https://via.placeholder.com/400x400/111827/6B7280?text=Load+Error';" />
-            <div class="absolute top-2 left-2 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded-md border border-white/10 text-[10px] font-mono text-indigo-400 font-bold">
-              #${tokenId}
-            </div>
+      card.innerHTML = `
+        <div class="relative aspect-square rounded-xl overflow-hidden bg-black/40 border border-white/5 flex items-center justify-center">
+          <img src="${imgUrl}" 
+               alt="${nft.name}"
+               loading="lazy"
+               class="w-full h-full object-contain" 
+               onerror="this.onerror=null; this.src='https://via.placeholder.com/400x400/111827/6B7280?text=Load+Error';" />
+          <div class="absolute top-2 left-2 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded-md border border-white/10 text-[10px] font-mono text-indigo-400 font-bold">
+            #${nft.tokenId}
           </div>
-          <div class="mt-3 px-1">
-            <h3 class="font-bold text-white text-sm truncate">${title}</h3>
-            <p class="text-[11px] text-gray-400 font-mono mt-0.5">Token ID: ${tokenId}</p>
-          </div>
-        `;
-
-        grid.appendChild(card);
-      });
+        </div>
+        <div class="mt-3 px-1">
+          <h3 class="font-bold text-white text-sm truncate">${nft.name}</h3>
+          <p class="text-[11px] text-gray-400 font-mono mt-0.5">Token ID: ${nft.tokenId}</p>
+        </div>
+      `;
+      grid.appendChild(card);
     }
 
     function enableDownloadButtons() {
@@ -250,71 +308,59 @@
       jsonBtn.className = "text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl bg-purple-600 text-white hover:bg-purple-500 cursor-pointer transition flex items-center gap-2 shadow-lg shadow-purple-500/20";
     }
 
-    // --- ZIP Downloaders (unchanged logic, same speed) ---
+    // SVG ZIP Downloader
     async function downloadImagesZip() {
-      if (allNFTs.length === 0) return;
       const zip = new JSZip();
       const statusText = document.getElementById("statusText");
-      const progressBar = document.getElementById("progressBar");
 
-      statusText.innerText = "📦 Extracting On-Chain SVG files into ZIP...";
-      let total = allNFTs.length;
+      statusText.innerText = "Extracting On-Chain SVG files into ZIP...";
 
-      for (let i = 0; i < total; i++) {
+      for (let i = 0; i < allNFTs.length; i++) {
         const nft = allNFTs[i];
-        const serialNumber = i + 1;
-        let imgUrl = nft.image?.cachedUrl || nft.image?.originalUrl || nft.raw?.metadata?.image;
-        imgUrl = resolveUrl(imgUrl);
+        let imgUrl = resolveUrl(nft.image);
 
-        try {
-          if (imgUrl.startsWith('data:image/svg+xml;base64,')) {
-            const base64Data = imgUrl.replace('data:image/svg+xml;base64,', '');
-            zip.file(`${serialNumber}.svg`, base64Data, { base64: true });
-          } else if (imgUrl.startsWith('data:image/svg+xml;utf8,')) {
-            const svgContent = decodeURIComponent(imgUrl.replace('data:image/svg+xml;utf8,', ''));
-            zip.file(`${serialNumber}.svg`, svgContent);
-          } else {
+        if (imgUrl.startsWith('data:image/svg+xml;base64,')) {
+          const base64Data = imgUrl.replace('data:image/svg+xml;base64,', '');
+          zip.file(`${nft.tokenId}.svg`, base64Data, { base64: true });
+        } else if (imgUrl.startsWith('data:image/svg+xml;utf8,')) {
+          const svgContent = decodeURIComponent(imgUrl.replace('data:image/svg+xml;utf8,', ''));
+          zip.file(`${nft.tokenId}.svg`, svgContent);
+        } else {
+          try {
             const res = await fetch(imgUrl);
             const blob = await res.blob();
             const ext = blob.type.includes('svg') ? 'svg' : 'png';
-            zip.file(`${serialNumber}.${ext}`, blob);
+            zip.file(`${nft.tokenId}.${ext}`, blob);
+          } catch(e) {
+            console.error(e);
           }
-        } catch (e) {
-          console.error(`Error adding item ${serialNumber}`, e);
         }
-
-        let pct = Math.floor(((i + 1) / total) * 100);
-        progressBar.style.width = pct + "%";
-        statusText.innerText = `📦 Packaging item ${serialNumber} of ${total}...`;
       }
 
-      statusText.innerText = "📁 Generating ZIP file...";
+      statusText.innerText = "Generating ZIP File...";
       const content = await zip.generateAsync({ type: "blob" });
-      saveAs(content, "OnChain_NFT_SVGs.zip");
-      statusText.innerText = "✅ SVG ZIP Downloaded Successfully!";
+      saveAs(content, "Robinhood_OnChain_SVGs.zip");
+      statusText.innerText = "SVG ZIP Downloaded Successfully!";
     }
 
+    // JSON Metadata ZIP Downloader
     async function downloadMetadataZip() {
-      if (allNFTs.length === 0) return;
       const zip = new JSZip();
       const statusText = document.getElementById("statusText");
 
-      statusText.innerText = "📦 Packaging JSON Metadata into ZIP...";
+      statusText.innerText = "Packaging JSON Metadata into ZIP...";
 
-      allNFTs.forEach((nft, index) => {
-        const serialNumber = index + 1;
-        const metadata = nft.raw?.metadata || nft;
-        const jsonContent = JSON.stringify(metadata, null, 2);
-        zip.file(`${serialNumber}.json`, jsonContent);
+      allNFTs.forEach((nft) => {
+        const jsonContent = JSON.stringify(nft.rawMetadata || nft, null, 2);
+        zip.file(`${nft.tokenId}.json`, jsonContent);
       });
 
-      statusText.innerText = "📁 Generating Metadata ZIP...";
+      statusText.innerText = "Generating Metadata ZIP File...";
       const content = await zip.generateAsync({ type: "blob" });
-      saveAs(content, "NFT_Metadata_JSON.zip");
-      statusText.innerText = "✅ JSON ZIP Downloaded Successfully!";
+      saveAs(content, "Robinhood_NFT_Metadata.zip");
+      statusText.innerText = "JSON ZIP Downloaded Successfully!";
     }
 
-    // Auto load on start with Robinhood as default
     window.addEventListener("DOMContentLoaded", startFetching);
   </script>
 </body>
